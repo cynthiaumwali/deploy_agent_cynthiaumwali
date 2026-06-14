@@ -18,6 +18,9 @@ function setup() {
         cp source_files/config.json "$parent_directory/Helpers/config.json"
 
         cp source_files/reports.log "$parent_directory/reports/reports.log"
+
+        echo "Parent directory and subdirectories created successfully with respective files."
+
     fi
 }
 
