@@ -37,6 +37,8 @@ function setup() {
             echo "Attendance threshold values remain unchanged. Proceeding with next step"
         fi
 
+	    trap "Process Interrupted. Bundling the current project state..."; cp "$parent_directory" "${parent_directory}_archive" && rm -r "$parent_directory" SIGINT
+
     fi
 }
 
