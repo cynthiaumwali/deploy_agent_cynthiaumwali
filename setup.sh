@@ -21,12 +21,12 @@ function setup() {
 
         echo "Parent directory and subdirectories created successfully with respective files."
 
-	    read "Do you want to update attendance thresholds? [yes/no]: " choice
+	    read -p "Do you want to update attendance thresholds? [yes/no]: " choice
 
         if [[ "$choice"=="yes" ]]
         then
-            read "Enter new threshold value for Warning: " warning_value
-            read "Enter new threshold value for Failure: " failure_value
+            read -p "Enter new threshold value for Warning: " warning_value
+            read -p "Enter new threshold value for Failure: " failure_value
 
             sed -i "s/75/$warning_value/g" "$parent_directory/Helpers/config.json"
             sed -i "s/50/$failure_value/g" "$parent_directory/Helpers/config.json"
@@ -37,8 +37,7 @@ function setup() {
             echo "Attendance threshold values remain unchanged. Proceeding with next step"
         fi
 
-	    trap "Process Interrupted. Bundling the current project state..."; cp "$parent_directory" "${parent_directory}_archive" && rm -r "$parent_directory" SIGINT
-
+        trap 'echo "Process Interrupted. Bundling the current project state..."; tar -czf "${parent_directory}_archive.tar.gz" "$parent_directory" && rm -r "$parent_directory"; exit 1' SIGINT
 	    echo "Checking if python3 exists..."
 
 	    if command -v python3 >/dev/null 
