@@ -39,6 +39,21 @@ function setup() {
 
 	    trap "Process Interrupted. Bundling the current project state..."; cp "$parent_directory" "${parent_directory}_archive" && rm -r "$parent_directory" SIGINT
 
+	    echo "Checking if python3 exists..."
+
+	    if command -v python3 >/dev/null 
+        then 
+            echo "Python3 is installed"
+        else
+            echo "Python3 is not installed"
+        fi
+
+        if [ -d "$parent_directory" ] && [ -f "$parent_directory/attendance_checker.py" ] && [ -f "$parent_directory/Helpers/assets.csv" ] && [ -f "$parent_directory/Helpers/config.json" ] && [ -f "$parent_directory/reports/reports.log" ]
+        then
+            echo "Application directory structure is correct"
+        else
+            echo "Application directory structure is not correct"
+        fi
     fi
 }
 
