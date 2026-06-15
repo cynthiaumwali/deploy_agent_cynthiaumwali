@@ -39,7 +39,7 @@ function setup() {
         fi
 
     #3. Handle SIGINT [Ctrl+C] using the TRAP command
-        trap 'echo "Process Interrupted. Bundling the current project state..."; tar -czf "${parent_directory}_archive.tar.gz" "$parent_directory" && rm -r "$parent_directory"; exit 1' SIGINT
+        trap process_management SIGINT
 
     #4. Environment validation [Checking if python3 is installed & verifying application directory structure]
 	    echo "Checking if python3 exists..."
@@ -58,6 +58,18 @@ function setup() {
             echo "Application directory structure is not correct"
         fi
     fi
+}
+
+process_management() {
+  echo "Process Interrupted. Bundling the current project state.."
+  if [[ -d "$parent_directory" ]]
+  then
+    tar -czf "${parent_directory}_archive.tar.gz" "$parent_directory" && rm -rf "$parent_directory"
+    echo "Project state bundled into ${parent_directory}_archive.tar.gz. Original directory is deleted."
+  else
+    echo "Parent directory not set yet. No bundling performed. Exiting.."
+  fi
+  exit 1
 }
 
 setup
