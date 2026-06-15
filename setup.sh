@@ -1,10 +1,27 @@
 #!/bin/bash
 
+parent_directory=""
+
+process_management() {
+  echo "Process Interrupted. Bundling the current project state.."
+  if [[ -d "$parent_directory" ]]
+  then
+    tar -czf "${parent_directory}_archive.tar.gz" "$parent_directory" && rm -rf "$parent_directory"
+    echo "Project state bundled into ${parent_directory}_archive.tar.gz. Original directory is deleted."
+  else
+    echo "Parent directory not set yet. No bundling performed. Exiting.."
+  fi
+  exit 1
+}
+
+#3. Handle SIGINT [Ctrl+C] using the TRAP command
+trap process_management SIGINT
+
 function setup() {
     #1.create parent directory and subdirectories with respective files
     read -p "Enter version name/number: " version
     parent_directory="attendance_tracker_${version}"
-    if [ -d "attendance_tracker_${version}" ]
+    if [[ -d "attendance_tracker_${version}" ]]
     then
         echo "Directory already exists. Please choose a different version name/number."
         exit 1
@@ -24,7 +41,7 @@ function setup() {
 	    read -p "Do you want to update attendance thresholds? [yes/no]: " choice
 
     #2. Dynamic threshold configuration
-        if [[ "$choice"=="yes" ]]
+        if [[ "$choice" == "yes" ]]
         then
             read -p "Enter new threshold value for Warning: " warning_value
             read -p "Enter new threshold value for Failure: " failure_value
@@ -38,11 +55,8 @@ function setup() {
             echo "Attendance threshold values remain unchanged. Proceeding with next step"
         fi
 
-    #3. Handle SIGINT [Ctrl+C] using the TRAP command
-        trap process_management SIGINT
-
     #4. Environment validation [Checking if python3 is installed & verifying application directory structure]
-	    echo "Checking if python3 exists..."
+	    echo "Checking if python3 exists.."
 
 	    if command -v python3 >/dev/null 
         then 
@@ -51,25 +65,13 @@ function setup() {
             echo "Python3 is not installed"
         fi
 
-        if [ -d "$parent_directory" ] && [ -f "$parent_directory/attendance_checker.py" ] && [ -f "$parent_directory/Helpers/assets.csv" ] && [ -f "$parent_directory/Helpers/config.json" ] && [ -f "$parent_directory/reports/reports.log" ]
+        if [[ -d "$parent_directory" ]] && [[ -f "$parent_directory/attendance_checker.py" ]] && [[ -f "$parent_directory/Helpers/assets.csv" ]] && [[ -f "$parent_directory/Helpers/config.json" ]] && [[ -f "$parent_directory/reports/reports.log" ]]
         then
             echo "Application directory structure is correct"
         else
             echo "Application directory structure is not correct"
         fi
     fi
-}
-
-process_management() {
-  echo "Process Interrupted. Bundling the current project state.."
-  if [[ -d "$parent_directory" ]]
-  then
-    tar -czf "${parent_directory}_archive.tar.gz" "$parent_directory" && rm -rf "$parent_directory"
-    echo "Project state bundled into ${parent_directory}_archive.tar.gz. Original directory is deleted."
-  else
-    echo "Parent directory not set yet. No bundling performed. Exiting.."
-  fi
-  exit 1
 }
 
 setup
