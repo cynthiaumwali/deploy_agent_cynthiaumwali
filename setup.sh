@@ -3,13 +3,13 @@
 parent_directory=""
 
 process_management() {
-  echo "Process Interrupted. Bundling the current project state.."
+  echo -e "\nProcess Interrupted. Bundling the current project state.."
   if [[ -d "$parent_directory" ]]
   then
     tar -czf "${parent_directory}_archive.tar.gz" "$parent_directory" && rm -rf "$parent_directory"
-    echo "Project state bundled into ${parent_directory}_archive.tar.gz. Original directory is deleted."
+    echo -e "\nProject state bundled into ${parent_directory}_archive.tar.gz. Original directory is deleted."
   else
-    echo "Parent directory not set yet. No bundling performed. Exiting.."
+    echo -e "\nParent directory not set yet. No bundling performed. Exiting.."
   fi
   exit 1
 }
