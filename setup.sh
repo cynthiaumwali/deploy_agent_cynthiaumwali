@@ -93,10 +93,10 @@ function setup() {
             read -p "Enter new threshold value for Warning: " warning_value
             read -p "Enter new threshold value for Failure: " failure_value
 
-            if [[ ! "$warning_value" =~ ^[+]?[0-9]*\.?[0-9]+$ || ! "$failure_value" =~ ^[+-]?[0-9]*\.?[0-9]+$ ]]
+            if [[ ! "$warning_value" =~ ^[+]?[0-9]*\.?[0-9]+$ || ! "$failure_value" =~ ^[+]?[0-9]*\.?[0-9]+$ ]]
                 then
                     echo -e "Invalid input. Attendance threshold values must be numbers.\n"
-            elif [[ "$warning_value" -gt 100 && "$failure_value" -gt 100 ]]
+            elif [[ "$warning_value" -gt 100 || "$failure_value" -gt 100 ]]
                 then
                     echo -e "Invalid input. Attendance threshold values must be less than or equal to 100.\n"
             else 
@@ -109,12 +109,8 @@ function setup() {
 
         echo -e "Attendance threshold values updated.\n"
 
-        elif [[ "$choice" == "no" || "$choice" == "NO" ]]
-        then
-            echo -e "Attendance threshold values remain unchanged. Proceeding with next step.\n"
         else
-            echo "You entered an invalid choice. Please enter 'yes' or 'no'."
-            exit 1
+            echo -e "Attendance threshold values remain unchanged. Proceeding with next step.\n"
         fi
 
     #4. Environment validation [Checking if python3 is installed & verifying application directory structure]
