@@ -15,22 +15,23 @@ parent_directory=""
 
 
 function setup() {
-    #1.create parent directory and subdirectories with respective files
-    read -p "Enter version name/number: " version
+    while true
+    do
+        read -p "Enter version name/number: " version
+            if [[ -z "$version" ]]
+            then
+                echo -e "Version name/number cannot be empty.\n"
+            elif  [[ -d "attendance_tracker_${version}" ]]
+            then
+                echo -e "Directory already exists. Please choose a different version name/number.\n"
+            else
+                break
+            fi
+    done
 
-    if [[ -z "$version" ]]
-    then
-        echo "Version name/number cannot be empty."
-        continue
-    fi
 
     parent_directory="attendance_tracker_${version}"
 
-    if [[ -d "attendance_tracker_${version}" ]]
-    then
-        echo "Directory already exists. Please choose a different version name/number."
-        exit 1
-    else
         mkdir -p "$parent_directory" "$parent_directory/Helpers" "$parent_directory/reports"
 
         if [[ $? -ne 0 ]]
@@ -73,9 +74,10 @@ function setup() {
 
         echo "Parent directory and subdirectories created successfully with respective files."
 
+        #2. Dynamic threshold configuration
+
 	    read -p "Do you want to update attendance thresholds? [yes/no]: " choice
 
-    #2. Dynamic threshold configuration
         if [[ "$choice" == "yes" || "$choice" == "YES" ]]
         then
             read -p "Enter new threshold value for Warning: " warning_value
