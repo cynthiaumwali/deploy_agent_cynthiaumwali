@@ -1,8 +1,8 @@
 #!/bin/bash
 
-parent_directory=""
+function setup() {
 
-#3. Handle SIGINT [Ctrl+C] using the TRAP command
+    #3. Handle SIGINT [Ctrl+C] using the TRAP command
     trap '  echo -e "\nProcess Interrupted. Bundling the current project state.."
     if [[ -d "$parent_directory" ]]
     then
@@ -13,8 +13,6 @@ parent_directory=""
     fi
     exit 1' SIGINT
 
-
-function setup() {
     while true
     do
         read -p "Enter version name/number: " version
