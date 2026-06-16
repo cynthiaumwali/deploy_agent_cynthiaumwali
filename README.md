@@ -14,3 +14,34 @@ The script also handles SIGINT [CTRL+C] Signal using the **trap** command. If th
 
 ## 4. Environment Validation
 The script also verifies whether the user has **python3** installed on their computer and issues a warning if it's not installed. Lastly, the script verifies if the generated parent directory has followed the wanted structure. 
+
+
+## How to run this script:
+
+
+First, make the script executable. In your terminal, navigate to your repository and type this command below:
+
+
+```bash  
+chmod +x setup.sh
+```
+
+
+Now that you have the permission to execute the file, run it as follow:
+
+
+```bash
+./setup.sh
+```
+
+Then follow the prompts in the script by entering a version name/number, then choosing whether to update the attendance thresholds. 
+
+
+## How to Trigger the Archive Feature
+
+While the script is running at any step, press **CTRL+C**. This will interrupt the script and triggers the trap, which will perform the following once the signal is caught:
+
+
+- If a parent directory has already been created, it gets compressed into <parent_directory>_archive.tar.gz and the original, incomplete directory is deleted.
+
+- If parent directory hasn't been created yet, meaning the script was interrupted before the version name was entered, the script simply exits with a notice that there was nothing to bundle.
