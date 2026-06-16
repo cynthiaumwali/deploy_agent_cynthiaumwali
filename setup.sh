@@ -76,18 +76,30 @@ function setup() {
 	    read -p "Do you want to update attendance thresholds? [yes/no]: " choice
 
     #2. Dynamic threshold configuration
-        if [[ "$choice" == "yes" ]]
+        if [[ "$choice" == "yes" || "$choice" == "YES" ]]
         then
             read -p "Enter new threshold value for Warning: " warning_value
             read -p "Enter new threshold value for Failure: " failure_value
+
+            if [[ "$warning_value" =~ ^[+-]?[0-9]*\.?[0-9]+$ || "$failure_value" =~ ^[+-]?[0-9]*\.?[0-9]+$ ]]
+            then
+                echo "Invalid input. Attendance threshold values must be numbers."
+                exit 1
+            fi
 
             sed -i "s/75/$warning_value/g" "$parent_directory/Helpers/config.json"
             sed -i "s/50/$failure_value/g" "$parent_directory/Helpers/config.json"
 
             echo "Threshold values updated"
+            
+
+        elif [[ "$choice" == "no" || "$choice" == "NO" ]]
+        then
+            echo "Attendance threshold values remain unchanged. Proceeding with next step"
 
         else
-            echo "Attendance threshold values remain unchanged. Proceeding with next step"
+            echo "You entered an invalid choice. Please enter 'yes' or 'no'."
+            exit 1
         fi
 
     #4. Environment validation [Checking if python3 is installed & verifying application directory structure]
