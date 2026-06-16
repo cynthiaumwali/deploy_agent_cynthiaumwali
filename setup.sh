@@ -2,25 +2,30 @@
 
 parent_directory=""
 
-process_management() {
-  echo -e "\nProcess Interrupted. Bundling the current project state.."
-  if [[ -d "$parent_directory" ]]
-  then
-    tar -czf "${parent_directory}_archive.tar.gz" "$parent_directory" && rm -rf "$parent_directory"
-    echo -e "\nProject state bundled into ${parent_directory}_archive.tar.gz. Original directory is deleted."
-  else
-    echo -e "\nParent directory not set yet. No bundling performed. Exiting.."
-  fi
-  exit 1
-}
-
 #3. Handle SIGINT [Ctrl+C] using the TRAP command
-trap process_management SIGINT
+    trap '  echo -e "\nProcess Interrupted. Bundling the current project state.."
+    if [[ -d "$parent_directory" ]]
+    then
+        tar -czf "${parent_directory}_archive.tar.gz" "$parent_directory" && rm -rf "$parent_directory"
+        echo -e "\nProject state bundled into ${parent_directory}_archive.tar.gz. Original directory is deleted."
+    else
+        echo -e "\nParent directory not set yet. No bundling performed. Exiting.."
+    fi
+    exit 1' SIGINT
+
 
 function setup() {
     #1.create parent directory and subdirectories with respective files
     read -p "Enter version name/number: " version
+
+    if [[ -z "$version" ]]
+    then
+        echo "Version name/number cannot be empty."
+        continue
+    fi
+
     parent_directory="attendance_tracker_${version}"
+
     if [[ -d "attendance_tracker_${version}" ]]
     then
         echo "Directory already exists. Please choose a different version name/number."
@@ -28,13 +33,43 @@ function setup() {
     else
         mkdir -p "$parent_directory" "$parent_directory/Helpers" "$parent_directory/reports"
 
+        if [[ $? -ne 0 ]]
+        then
+            echo "Failed to create directories. Please check permissions and try again."
+            exit 1
+        fi
+
         cp source_files/attendance_checker.py "$parent_directory/attendance_checker.py"
+
+        if [[ $? -ne 0 ]]
+        then
+            echo "Failed to copy attendance_checker.py. Please check permissions and try again."
+            exit 1
+        fi
 
         cp source_files/assets.csv "$parent_directory/Helpers/assets.csv"
 
+        if [[ $? -ne 0 ]]
+        then
+            echo "Failed to copy assets.csv. Please check permissions and try again."
+            exit 1
+        fi
+
         cp source_files/config.json "$parent_directory/Helpers/config.json"
 
+        if [[ $? -ne 0 ]]
+        then
+            echo "Failed to copy config.json. Please check permissions and try again."
+            exit 1
+        fi
+
         cp source_files/reports.log "$parent_directory/reports/reports.log"
+
+        if [[ $? -ne 0 ]]
+        then
+            echo "Failed to copy reports.log. Please check permissions and try again."
+            exit 1
+        fi
 
         echo "Parent directory and subdirectories created successfully with respective files."
 
@@ -58,7 +93,7 @@ function setup() {
     #4. Environment validation [Checking if python3 is installed & verifying application directory structure]
 	    echo "Checking if python3 exists.."
 
-	    if command -v python3 >/dev/null 
+	    if command -v python3 
         then 
             echo "Python3 is installed"
         else
