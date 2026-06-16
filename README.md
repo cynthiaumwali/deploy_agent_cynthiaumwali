@@ -45,3 +45,7 @@ While the script is running at any step, press **CTRL+C**. This will interrupt t
 - If a parent directory has already been created, it gets compressed into <parent_directory>_archive.tar.gz and the original, incomplete directory is deleted.
 
 - If parent directory hasn't been created yet, meaning the script was interrupted before the user input was captured, the script simply exits with a notice that there was nothing to bundle.
+
+## Run-through Video
+
+This is the link of my video, explaining my approach to the solution: https://youtu.be/DEXEhad_Ov8
