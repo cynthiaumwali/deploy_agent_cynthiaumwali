@@ -34,7 +34,7 @@ Now that you have the permission to execute the file, run it as follow:
 ./setup.sh
 ```
 
-Then follow the prompts in the script by entering a version name/number, then choosing whether to update the attendance thresholds. 
+Then follow the prompts in the script by entering an input that will serve as version name/number and choosing whether to update the attendance thresholds. 
 
 
 ## How to Trigger the Archive Feature
@@ -44,4 +44,4 @@ While the script is running at any step, press **CTRL+C**. This will interrupt t
 
 - If a parent directory has already been created, it gets compressed into <parent_directory>_archive.tar.gz and the original, incomplete directory is deleted.
 
-- If parent directory hasn't been created yet, meaning the script was interrupted before the version name was entered, the script simply exits with a notice that there was nothing to bundle.
+- If parent directory hasn't been created yet, meaning the script was interrupted before the user input was captured, the script simply exits with a notice that there was nothing to bundle.

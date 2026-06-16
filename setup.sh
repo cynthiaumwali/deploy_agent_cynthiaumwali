@@ -2,14 +2,14 @@
 
 function setup() {
 
-    #3. Handle SIGINT [Ctrl+C] using the TRAP command
+    #3. Handling SIGINT [Ctrl+C] using the TRAP command at the beginning before any other operationn
     trap '  echo -e "\nProcess Interrupted. Bundling the current project state.."
     if [[ -d "$parent_directory" ]]
     then
         tar -czf "${parent_directory}_archive.tar.gz" "$parent_directory" && rm -rf "$parent_directory"
-        echo -e "\nProject state bundled into ${parent_directory}_archive.tar.gz. Original directory has been deleted."
+        echo -e "\nProject state was bundled into ${parent_directory}_archive.tar.gz. Original directory has been deleted."
     else
-        echo -e "\nParent directory not set yet. No bundling performed. Exiting.."
+        echo -e "\nParent directory was not set yet. No bundling performed. Exiting.."
     fi
     exit 1' SIGINT
 
@@ -26,7 +26,6 @@ function setup() {
                 break
             fi
     done
-
 
     parent_directory="attendance_tracker_${version}"
 
@@ -116,7 +115,7 @@ function setup() {
     #4. Environment validation [Checking if python3 is installed & verifying application directory structure]
 	    echo "Checking if python3 exists.."
 
-	    if command -v python3 
+	    if command -v python3 --version
         then 
             echo "Python3 is installed"
         else
